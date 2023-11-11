@@ -1,0 +1,176 @@
+openapi: 3.0.0
+info:
+  title: ISO Containers API
+  version: 1.0.0
+
+contact:
+  name: Apptech-team
+  email: support@apptech-team.ru
+
+basePath: /
+schemes:
+  - https
+
+# SERVERS LIST
+servers:
+  - url: 'http://193.176.79.140:7300'
+
+# ROUTES APP
+paths:
+  /info:
+    get:
+      summary: Full information for container
+      description: Return info container
+      tags: [Containers]
+      parameters:
+        - name: iso
+          in: query
+          required: true
+          description: ISO code container
+          schema:
+            type: string
+        - name: lang
+          in: query
+          description: Language for info type container
+          schema:
+            type: string
+            enum: [ru, en]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      isoCode:
+                        type: string
+                        example: 20G0
+                      typeCode:
+                        type: string
+                        example: G0
+                      groupCode:
+                        type: string
+                        example: GP
+                      name:
+                        type: string
+                        example: Dry Container (DC)
+                      type:
+                        type: string
+                        example: General purpose container without ventilation
+                      specifications:
+                        type: string | null
+                        example: Opening(s) at one end or both ends
+                      length:
+                        type: object
+                        properties:
+                          mm:
+                            type: string
+                            example: 6058
+                          ft:
+                            type: string
+                            example: 8
+                      heigth:
+                        type: object
+                        properties:
+                          mm:
+                            type: string
+                            example: 2438
+                          ft:
+                            type: string
+                            example: 8
+                      width:
+                        type: object
+                        properties:
+                          mm:
+                            type: string
+                            example: 2438
+                          ft:
+                            type: string
+                            example: 8
+        '400':
+          description: 'Params is incorrect'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: failed
+                  message:
+                    type: string
+                    example: container type not found
+        '422':
+          description: 'Iso code param is invalid'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: failed
+                  message:
+                    type: string
+                    example: Iso code is incorrect
+  /iso:
+    get:
+      summary: Configure ISO code for params
+      tags: [Containers]
+      deprecated: true
+      parameters:
+        - name: type
+          in: query
+          required: true
+          description: Type code container
+          schema:
+            type: string
+        - name: length
+          in: query
+          required: true
+          description: Length code container
+          schema:
+            type: string
+        - name: width
+          in: query
+          required: true
+          description: Width code container
+          schema:
+            type: string
+        - name: height
+          in: query
+          required: true
+          description: Height code container
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success ISO code generation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: 20G0
+        # '401':
+        #   $ref: '#/components/responses/UnauthorizedError'
+
+# COMPONENTS
+components:
+  responses:
+    NotFound:
+      description: Entity not found

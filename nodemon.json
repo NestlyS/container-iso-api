@@ -1,0 +1,5 @@
+{
+	"exec": "yarn run ts:watch",
+	"watch": ["src"],
+	"ext": "ts, js, json, yaml, yml"
+}
